@@ -9,15 +9,17 @@ type ButtonProps =
       iconName?: keyof typeof Icons;
       path: Href;
       action?: never;
+      disable?: boolean;
     }
   | {
       title: string;
       iconName?: keyof typeof Icons;
       action: () => void;
       path?: never;
+      disable?: boolean;
     };
 
-function Button({ title, iconName, path, action }: ButtonProps) {
+function Button({ title, iconName, path, action, disable }: ButtonProps) {
   const handlePress = () => {
     if (path) {
       router.push(path);
@@ -31,6 +33,7 @@ function Button({ title, iconName, path, action }: ButtonProps) {
       accessibilityRole="button"
       onPress={handlePress}
       style={styles.button}
+      disabled={disable}
     >
       {iconName && <Icon name={iconName} />}
       <Text style={styles.buttonText}>{title}</Text>

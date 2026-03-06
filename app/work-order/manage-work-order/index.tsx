@@ -1,13 +1,18 @@
+import { IsErrorComponent } from "@/src/components/error";
+import { FormCard } from "@/src/components/manage-work-order/FormCard";
+import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
-import { Screen } from "@/src/components/ui/screen";
+import { Container, Screen } from "@/src/components/ui/screen";
+import { useCreateWorkOrder } from "@/src/hooks/work-orders/useCreateWorkOrder";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { CreateWorkOrderInput, CreateWorkOrderSchema } from "./schema";
 
 export default function ManageWorkOrder() {
   const { id } = useLocalSearchParams<{ id?: string }>();
+  const { onSubmit, isError } = useCreateWorkOrder();
 
   const {
     control,
@@ -17,19 +22,14 @@ export default function ManageWorkOrder() {
     resolver: zodResolver(CreateWorkOrderSchema),
   });
 
-  function onSubmit(data: CreateWorkOrderInput) {
-    router.push("../details/1");
-  }
-
   return (
     <Screen>
       <Header
         title={`${id ? "Editar" : "Criar"} orderm de serviço`}
         hasBackButton
       />
-      <View style={styles.form}>
-        <View>
-          <Text>Título</Text>
+      <Container>
+        <FormCard label="Título" error={errors?.title?.message}>
           <Controller
             control={control}
             name="title"
@@ -44,10 +44,9 @@ export default function ManageWorkOrder() {
               />
             )}
           />
-        </View>
+        </FormCard>
 
-        <View>
-          <Text>Descrição</Text>
+        <FormCard label="Descrição" error={errors?.description?.message}>
           <Controller
             control={control}
             name="description"
@@ -58,13 +57,13 @@ export default function ManageWorkOrder() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                editable
               />
             )}
           />
-        </View>
+        </FormCard>
 
-        <View>
-          <Text>Responsável</Text>
+        <FormCard label="Responsável" error={errors?.assignedTo?.message}>
           <Controller
             control={control}
             name="assignedTo"
@@ -75,21 +74,33 @@ export default function ManageWorkOrder() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                editable
               />
             )}
           />
-        </View>
-        <Button title="Criar" onPress={handleSubmit(onSubmit)} />
-        {errors.title && <Text>{errors.title.message}</Text>}
-        {errors.description && <Text>{errors.description.message}</Text>}
-        {errors.assignedTo && <Text>{errors.assignedTo.message}</Text>}
-      </View>
+        </FormCard>
+
+        {isError ? (
+          <IsErrorComponent
+            title="Houve um erro ao criar"
+            subtitle="Tente novamente em instantes"
+            action={handleSubmit(onSubmit)}
+          />
+        ) : (
+          <Button
+            title={
+              isError ? "Tentar criar novamente" : "Criar ordem de serviço"
+            }
+            iconName="PlusCircleIcon"
+            action={handleSubmit(onSubmit)}
+          />
+        )}
+      </Container>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  form: { flex: 1, padding: 16, gap: 16 },
   input: {
     borderWidth: 1,
     borderColor: "#999",
