@@ -4,9 +4,9 @@ export type WorkOrder = {
   description: string;
   status: "Pending" | "In Progress" | "Completed";
   assignedTo: string;
-  createdAt: string; // ISODate
-  updatedAt: string; // ISODate
-  deletedAt?: string; // ISODate
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
   completed: boolean;
   deleted: boolean;
 };
@@ -26,3 +26,10 @@ export type WorkOrderDetails = Pick<
   | "createdAt"
   | "updatedAt"
 >;
+
+export type ManageWorkOrderInput = {
+  id?: string;
+  title: string;
+  description: string;
+  assignedTo: string;
+};

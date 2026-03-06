@@ -1,5 +1,5 @@
-import { CreateWorkOrderInput } from "@/app/work-order/manage-work-order/schema";
-import { WorkOrder } from "@/src/domain/dtos/work-order";
+import { CreateWorkOrderData } from "@/app/work-order/manage-work-order/schema";
+import { ManageWorkOrderInput, WorkOrder } from "@/src/domain/dtos/work-order";
 
 export async function getWorkOrders(): Promise<WorkOrder[]> {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders`;
@@ -26,7 +26,7 @@ export async function getWorkOrderById(id: string): Promise<WorkOrder> {
 }
 
 export async function createWorkOrder(
-  data: CreateWorkOrderInput,
+  data: CreateWorkOrderData,
 ): Promise<WorkOrder> {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders`;
 
@@ -40,6 +40,28 @@ export async function createWorkOrder(
 
   if (!response.ok) {
     throw new Error("Erro ao criar ordem de serviço");
+  }
+
+  return response.json();
+}
+
+export async function updateWorkOrder(
+  data: ManageWorkOrderInput,
+): Promise<WorkOrder> {
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders/${data.id}`;
+
+  delete data.id;
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao atualizar ordem de serviço");
   }
 
   return response.json();
