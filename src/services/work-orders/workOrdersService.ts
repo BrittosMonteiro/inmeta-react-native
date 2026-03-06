@@ -66,3 +66,15 @@ export async function updateWorkOrder(
 
   return response.json();
 }
+
+export async function deleteWorkOrder(id: string): Promise<void> {
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders/${id}`;
+
+  const response = await fetch(url, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao deletar ordem de serviço");
+  }
+}

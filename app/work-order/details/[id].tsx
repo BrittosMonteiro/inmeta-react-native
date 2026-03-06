@@ -1,7 +1,9 @@
 import { Card } from "@/src/components/details/Card";
+import { IsErrorComponent } from "@/src/components/error";
 import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
+import { useDeleteWorkOrder } from "@/src/hooks/work-orders/useDeleteWorkOrder";
 import { useGetWorkOrder } from "@/src/hooks/work-orders/useGetWorkOrder";
 import { formatDate } from "@/src/utils/date-utils";
 import { useLocalSearchParams } from "expo-router";
@@ -12,12 +14,13 @@ export default function WorkOrderDetails() {
   const { id } = useLocalSearchParams();
 
   const { data, error, isLoading, refetch } = useGetWorkOrder(id as string);
+  const { onDelete, isError, isPending } = useDeleteWorkOrder();
 
   if (error || !data) {
     return <Button title="Tentar novamente" action={refetch} />;
   }
 
-  if (isLoading) {
+  if (isLoading || isPending) {
     return <ActivityIndicator />;
   }
 
@@ -45,11 +48,19 @@ export default function WorkOrderDetails() {
             path={`/work-order/manage-work-order?id=${id}`}
           />
 
-          <Button
-            title="Apagar"
-            iconName="TrashIcon"
-            action={() => console.log("apagar")}
-          />
+          {isError ? (
+            <IsErrorComponent
+              title={"Houve um erro ao tentar apagar"}
+              subtitle="Tente novamente em instantes"
+              action={() => onDelete(data.id)}
+            />
+          ) : (
+            <Button
+              title="Apagar"
+              iconName="TrashIcon"
+              action={() => onDelete(data.id)}
+            />
+          )}
         </View>
       </Container>
     </Screen>
