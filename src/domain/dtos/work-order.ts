@@ -15,3 +15,14 @@ export type WorkOrderCard = Pick<
   WorkOrder,
   "id" | "title" | "description" | "status" | "assignedTo"
 >;
+
+export type WorkOrderDetails = Pick<
+  WorkOrder,
+  | "id"
+  | "title"
+  | "description"
+  | "status"
+  | "assignedTo"
+  | "createdAt"
+  | "updatedAt"
+>;

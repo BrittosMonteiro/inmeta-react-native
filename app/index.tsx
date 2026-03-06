@@ -1,6 +1,7 @@
+import { Button } from "@/src/components/ui/button";
 import { Card } from "@/src/components/ui/card";
 import { Header } from "@/src/components/ui/header";
-import { Screen } from "@/src/components/ui/screen";
+import { Container, Screen } from "@/src/components/ui/screen";
 import { WorkOrderCard } from "@/src/domain/dtos/work-order";
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
@@ -17,18 +18,23 @@ export default function Index() {
   return (
     <Screen>
       <Header title="Ordens de serviço" />
-      <FlatList
-        data={DATA}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Card order={item} />}
-        contentContainerStyle={styles.listContent}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      <Container>
+        <Button
+          title="Criar nova ordem de serviço"
+          iconName="PlusCircleIcon"
+          path="/work-order/manage-work-order"
+        />
+        <FlatList
+          data={DATA}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Card order={item} />}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      </Container>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  listContent: { padding: 12 },
   separator: { height: 10 },
 });

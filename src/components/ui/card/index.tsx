@@ -7,7 +7,7 @@ function Card({ order }: { order: WorkOrderCard }) {
     <Pressable
       accessibilityRole="button"
       style={styles.item}
-      onPress={() => router.push(`/details/${order.id}`)}
+      onPress={() => router.push(`/work-order/details/${order.id}`)}
     >
       <Text style={styles.title}>{order.title}</Text>
       <Text style={styles.subtitle}>{order.assignedTo}</Text>

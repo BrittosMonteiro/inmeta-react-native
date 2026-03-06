@@ -11,7 +11,7 @@ function Header({ title, hasBackButton }: HeaderProps) {
   return (
     <View style={styles.header}>
       {hasBackButton && (
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={() => router.back()} accessibilityRole="button">
           <Icon name="ArrowCircleLeftIcon" />
         </Pressable>
       )}
