@@ -12,4 +12,4 @@ export const CreateWorkOrderSchema = z.object({
     .min(1, "Responsável é obrigatório"),
 });
 
-export type CreateWorkOrderInput = z.infer<typeof CreateWorkOrderSchema>;
+export type CreateWorkOrderData = z.infer<typeof CreateWorkOrderSchema>;

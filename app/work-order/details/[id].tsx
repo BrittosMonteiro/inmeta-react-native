@@ -26,6 +26,11 @@ export default function WorkOrderDetails() {
       <Header title="Detalhes da ordem" hasBackButton />
 
       <Container>
+        <Button
+          title="Concluir"
+          action={() => console.log("Concluir")}
+          iconName="CheckCircleIcon"
+        />
         <Card label="Título" text={data.title} />
         <Card label="Descrição" text={data.description} />
         <Card label="Responsável" text={data.assignedTo} />

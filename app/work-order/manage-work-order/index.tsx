@@ -3,24 +3,25 @@ import { FormCard } from "@/src/components/manage-work-order/FormCard";
 import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
-import { useCreateWorkOrder } from "@/src/hooks/work-orders/useCreateWorkOrder";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useGetWorkOrder } from "@/src/hooks/work-orders/useGetWorkOrder";
+import { useManageWorkOrder } from "@/src/hooks/work-orders/useManageWorkOrder";
 import { useLocalSearchParams } from "expo-router";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { StyleSheet, TextInput } from "react-native";
-import { CreateWorkOrderInput, CreateWorkOrderSchema } from "./schema";
 
 export default function ManageWorkOrder() {
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const { onSubmit, isError } = useCreateWorkOrder();
+  const { data } = useGetWorkOrder(id as string);
 
   const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreateWorkOrderInput>({
-    resolver: zodResolver(CreateWorkOrderSchema),
-  });
+    onSubmit,
+    isError,
+    form: {
+      formState: { errors },
+      control,
+      handleSubmit,
+    },
+  } = useManageWorkOrder(data);
 
   return (
     <Screen>
@@ -82,17 +83,15 @@ export default function ManageWorkOrder() {
 
         {isError ? (
           <IsErrorComponent
-            title="Houve um erro ao criar"
+            title={`Houve um erro ao tentar ${id ? "editar" : "criar"}`}
             subtitle="Tente novamente em instantes"
-            action={handleSubmit(onSubmit)}
+            action={handleSubmit((data) => onSubmit({ ...data, id }))}
           />
         ) : (
           <Button
-            title={
-              isError ? "Tentar criar novamente" : "Criar ordem de serviço"
-            }
+            title={`${id ? "Editar" : "Criar"} ordem de serviço`}
             iconName="PlusCircleIcon"
-            action={handleSubmit(onSubmit)}
+            action={handleSubmit((data) => onSubmit({ ...data, id }))}
           />
         )}
       </Container>
