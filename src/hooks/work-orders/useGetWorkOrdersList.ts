@@ -5,6 +5,7 @@ export function useGetWorkOrdersList() {
   const query = useQuery({
     queryKey: ["work-orders"],
     queryFn: getWorkOrders,
+    refetchOnMount: "always",
   });
 
   return {
