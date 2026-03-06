@@ -2,29 +2,38 @@ import { Card } from "@/src/components/details/Card";
 import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
+import { useGetWorkOrder } from "@/src/hooks/work-orders/useGetWorkOrder";
+import { formatDate } from "@/src/utils/date-utils";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 export default function WorkOrderDetails() {
   const { id } = useLocalSearchParams();
+
+  const { data, error, isLoading, refetch } = useGetWorkOrder(id as string);
+
+  if (error || !data) {
+    return <Button title="Tentar novamente" action={refetch} />;
+  }
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <Screen>
       <Header title="Detalhes da ordem" hasBackButton />
 
       <Container>
-        <Card label="Título" text="Nova ordem de serviço" />
-        <Card
-          label="Descrição"
-          text="Foi solicitada a entrega de materiais no local X, porém até o momento a entrega consta como pendente. Verificar situação o quanto antes."
-        />
-        <Card label="Responsável" text="Lucas Brittos" />
-        <Card label="Status" text="Pendente" />
-        <Card label="Criado em" text="Nova ordem de serviço" />
-        <Card label="Última atualização" text="Nova ordem de serviço" />
+        <Card label="Título" text={data.title} />
+        <Card label="Descrição" text={data.description} />
+        <Card label="Responsável" text={data.assignedTo} />
+        <Card label="Status" text={data.status} />
+        <Card label="Criado em" text={formatDate(data.createdAt)} />
+        <Card label="Última atualização" text={formatDate(data.updatedAt)} />
 
-        <View style={styles.buttonsRow}>
+        <View style={styles.buttonsSection}>
           <Button
             title="Editar"
             iconName="PencilSimpleIcon"
@@ -43,7 +52,7 @@ export default function WorkOrderDetails() {
 }
 
 const styles = StyleSheet.create({
-  buttonsRow: { display: "flex", flexDirection: "row", gap: 16 },
+  buttonsSection: { display: "flex", flexDirection: "column", gap: 16 },
   row: { marginBottom: 12 },
   label: { fontSize: 14, color: "#666" },
   value: { fontSize: 16, color: "#111" },

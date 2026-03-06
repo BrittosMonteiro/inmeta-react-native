@@ -2,19 +2,16 @@ import { Button } from "@/src/components/ui/button";
 import { Card } from "@/src/components/ui/card";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
-import { WorkOrderCard } from "@/src/domain/dtos/work-order";
+import { useGetWorkOrdersList } from "@/src/hooks/work-orders/useGetWorkOrdersList";
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-
-const DATA: WorkOrderCard[] = Array.from({ length: 20 }).map((_, i) => ({
-  id: String(i + 1),
-  title: `Item ${i + 1}`,
-  description: `Description ${i + 1}`,
-  status: i % 2 ? "Completed" : "In Progress",
-  assignedTo: "Lucas Brittos",
-}));
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 
 export default function Index() {
+  const { data, isLoading } = useGetWorkOrdersList();
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
   return (
     <Screen>
       <Header title="Ordens de serviço" />
@@ -25,7 +22,7 @@ export default function Index() {
           path="/work-order/manage-work-order"
         />
         <FlatList
-          data={DATA}
+          data={data}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <Card order={item} />}
           ItemSeparatorComponent={() => <View style={styles.separator} />}

@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
     borderRadius: 4,
-    flex: 1,
   },
 
   buttonText: {
