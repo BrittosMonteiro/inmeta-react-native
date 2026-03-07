@@ -1,25 +1,17 @@
-import { Href, router } from "expo-router";
-import * as Icons from "phosphor-react-native";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { router } from "expo-router";
+import { Pressable, Text } from "react-native";
 import { Icon } from "../icon";
+import { bgVariantStyles, styles, textVariantStyles } from "./styles";
+import { ButtonProps } from "./type";
 
-type ButtonProps =
-  | {
-      title: string;
-      iconName?: keyof typeof Icons;
-      path: Href;
-      action?: never;
-      disable?: boolean;
-    }
-  | {
-      title: string;
-      iconName?: keyof typeof Icons;
-      action: () => void;
-      path?: never;
-      disable?: boolean;
-    };
-
-function Button({ title, iconName, path, action, disable }: ButtonProps) {
+function Button({
+  title,
+  iconName,
+  path,
+  action,
+  disable,
+  variant = "neutral",
+}: ButtonProps) {
   const handlePress = () => {
     if (path) {
       router.push(path);
@@ -32,30 +24,24 @@ function Button({ title, iconName, path, action, disable }: ButtonProps) {
     <Pressable
       accessibilityRole="button"
       onPress={handlePress}
-      style={styles.button}
+      style={[
+        styles.button,
+        bgVariantStyles[variant],
+        disable && styles.disabled,
+      ]}
       disabled={disable}
     >
-      {iconName && <Icon name={iconName} />}
-      <Text style={styles.buttonText}>{title}</Text>
+      {iconName && (
+        <Icon
+          name={iconName}
+          color={Object.entries(textVariantStyles[variant])[0][1]}
+        />
+      )}
+      <Text style={[styles.buttonText, textVariantStyles[variant]]}>
+        {title}
+      </Text>
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 8,
-    gap: 4,
-    borderRadius: 4,
-  },
-
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "500",
-  },
-});
 
 export { Button };

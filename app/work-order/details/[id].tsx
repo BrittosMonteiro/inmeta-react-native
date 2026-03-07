@@ -1,4 +1,5 @@
 import { Card } from "@/src/components/details/Card";
+import { Completed } from "@/src/components/details/Completed";
 import { IsErrorComponent } from "@/src/components/error";
 import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
@@ -29,11 +30,16 @@ export default function WorkOrderDetails() {
       <Header title="Detalhes da ordem" hasBackButton />
 
       <Container>
-        <Button
-          title="Concluir"
-          action={() => console.log("Concluir")}
-          iconName="CheckCircleIcon"
-        />
+        {data.status !== "Completed" ? (
+          <Button
+            title="Concluir"
+            action={() => console.log("Concluir")}
+            iconName="CheckCircleIcon"
+            variant="success"
+          />
+        ) : (
+          <Completed />
+        )}
         <Card label="Título" text={data.title} />
         <Card label="Descrição" text={data.description} />
         <Card label="Responsável" text={data.assignedTo} />
@@ -46,6 +52,7 @@ export default function WorkOrderDetails() {
             title="Editar"
             iconName="PencilSimpleIcon"
             path={`/work-order/manage-work-order?id=${id}`}
+            variant="primary"
           />
 
           {isError ? (
@@ -59,6 +66,7 @@ export default function WorkOrderDetails() {
               title="Apagar"
               iconName="TrashIcon"
               action={() => onDelete(data.id)}
+              variant="danger"
             />
           )}
         </View>
