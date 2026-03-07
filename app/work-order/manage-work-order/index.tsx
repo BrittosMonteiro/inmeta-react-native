@@ -92,6 +92,7 @@ export default function ManageWorkOrder() {
             title={`${id ? "Editar" : "Criar"} ordem de serviço`}
             iconName="PlusCircleIcon"
             action={handleSubmit((data) => onSubmit({ ...data, id }))}
+            variant="success"
           />
         )}
       </Container>
