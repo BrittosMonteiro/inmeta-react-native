@@ -1,7 +1,7 @@
 import {
   CreateWorkOrderData,
   CreateWorkOrderSchema,
-} from "@/app/work-order/manage-work-order/schema";
+} from "@/src/app/work-order/manage-work-order/schema";
 import {
   createLocalWorkOrder,
   updateLocalWorkOrder,

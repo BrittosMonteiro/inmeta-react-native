@@ -1,4 +1,4 @@
-import { CreateWorkOrderData } from "@/app/work-order/manage-work-order/schema";
+import { CreateWorkOrderData } from "@/src/app/work-order/manage-work-order/schema";
 import { UpdateWorkOrderInput, WorkOrder } from "@/src/domain/dtos/work-order";
 
 export async function getWorkOrders(): Promise<WorkOrder[]> {
