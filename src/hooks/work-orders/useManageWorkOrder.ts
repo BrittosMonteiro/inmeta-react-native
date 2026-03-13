@@ -2,11 +2,16 @@ import {
   CreateWorkOrderData,
   CreateWorkOrderSchema,
 } from "@/app/work-order/manage-work-order/schema";
+import {
+  createLocalWorkOrder,
+  updateLocalWorkOrder,
+} from "@/src/database/repositories/workOrdersRepository";
 import { ManageWorkOrderInput } from "@/src/domain/dtos/work-order";
 import {
   createWorkOrder,
   updateWorkOrder,
 } from "@/src/services/work-orders/workOrdersService";
+import { isOnline } from "@/src/utils/network/isOnline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
@@ -39,11 +44,13 @@ export function useManageWorkOrder(initialData?: ManageWorkOrderInput) {
 const useManageWorkOrderMutation = () => {
   const mutation = useMutation({
     mutationFn: async (data: ManageWorkOrderInput) => {
-      if (data.id) {
-        return await updateWorkOrder(data);
+      const online = await isOnline();
+
+      if ("id" in data) {
+        return online ? updateWorkOrder(data) : updateLocalWorkOrder(data);
       }
 
-      return await createWorkOrder(data);
+      return online ? createWorkOrder(data) : createLocalWorkOrder(data);
     },
     onSuccess: () => {
       router.push("/");

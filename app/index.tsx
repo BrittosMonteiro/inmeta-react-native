@@ -2,14 +2,18 @@ import { Button } from "@/src/components/ui/button";
 import { Card } from "@/src/components/ui/card";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
-import { useGetWorkOrdersList } from "@/src/hooks/work-orders/useGetWorkOrdersList";
-import React from "react";
+import { useWorkOrdersStore } from "@/src/store/workOrderStore";
+import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 
 export default function Index() {
-  const { data, isLoading } = useGetWorkOrdersList();
+  const { loadWorkOrders, workOrders } = useWorkOrdersStore();
 
-  if (isLoading) {
+  useEffect(() => {
+    loadWorkOrders();
+  }, [loadWorkOrders]);
+
+  if (!workOrders) {
     return <ActivityIndicator />;
   }
   return (
@@ -22,7 +26,7 @@ export default function Index() {
           path="/work-order/manage-work-order"
         />
         <FlatList
-          data={data}
+          data={workOrders}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <Card order={item} />}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
