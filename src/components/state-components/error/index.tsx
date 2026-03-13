@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Button } from "../ui/button";
-import { Icon } from "../ui/icon";
+import { Button } from "../../ui/button";
+import { Icon } from "../../ui/icon";
 
 type IsErrorComponentProps = {
   title: string;

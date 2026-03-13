@@ -1,7 +1,7 @@
 import {
   CreateWorkOrderData,
   CreateWorkOrderSchema,
-} from "@/app/work-order/manage-work-order/schema";
+} from "@/src/app/work-order/manage-work-order/schema";
 import {
   createLocalWorkOrder,
   updateLocalWorkOrder,
@@ -25,7 +25,7 @@ export function useManageWorkOrder(initialData?: ManageWorkOrderInput) {
     try {
       await mutateAsync(data);
     } catch (error) {
-      console.error("Erro ao criar ordem de serviço:", error);
+      console.error(error);
     }
   };
 
@@ -46,7 +46,7 @@ const useManageWorkOrderMutation = () => {
     mutationFn: async (data: ManageWorkOrderInput) => {
       const online = await isOnline();
 
-      if ("id" in data) {
+      if ("id" in data && data.id) {
         return online ? updateWorkOrder(data) : updateLocalWorkOrder(data);
       }
 

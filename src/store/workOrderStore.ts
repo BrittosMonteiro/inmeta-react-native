@@ -10,12 +10,14 @@ import { isOnline } from "../utils/network/isOnline";
 type WorkOrdersState = {
   workOrders: WorkOrder[];
   loadWorkOrders: () => Promise<void>;
+  isLoading: boolean;
 };
 
 export const useWorkOrdersStore = create<WorkOrdersState>((set) => ({
   workOrders: [],
-
+  isLoading: false,
   loadWorkOrders: async () => {
+    set({ isLoading: true });
     try {
       const localData = await getLocalWorkOrders();
 
@@ -26,6 +28,7 @@ export const useWorkOrdersStore = create<WorkOrdersState>((set) => ({
       const online = await isOnline();
 
       if (!online) {
+        set({ isLoading: false });
         return;
       }
 
@@ -33,9 +36,10 @@ export const useWorkOrdersStore = create<WorkOrdersState>((set) => ({
 
       await saveWorkOrders(remoteData);
 
-      set({ workOrders: remoteData });
+      set({ workOrders: remoteData, isLoading: false });
     } catch (error) {
       console.log("Erro ao carregar ordens:", error);
+      set({ isLoading: false });
     }
   },
 }));

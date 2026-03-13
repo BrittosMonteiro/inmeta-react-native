@@ -1,18 +1,28 @@
 import { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-function Screen({ children }: { children?: ReactNode }) {
-  return <SafeAreaView style={styles.screen}>{children}</SafeAreaView>;
+type ScreenContainerProps = {
+  children?: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
+function Screen({ children, style }: ScreenContainerProps) {
+  return <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>;
 }
 
-function Container({ children }: { children?: ReactNode }) {
-  return <View style={styles.container}>{children}</View>;
+function Container({ children, style }: ScreenContainerProps) {
+  return <View style={[styles.container, style]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#fff", padding: 0 },
-  container: { flex: 1, backgroundColor: "#fff", padding: 16, gap: 16 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 16,
+    gap: 16,
+  },
 });
 
 export { Container, Screen };
