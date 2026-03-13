@@ -38,6 +38,7 @@ export type UpdateWorkOrderInput = {
   title: string;
   description: string;
   assignedTo: string;
+  status: "Pending" | "In Progress" | "Completed";
 };
 
 export type ManageWorkOrderInput = CreateWorkOrderInput | UpdateWorkOrderInput;

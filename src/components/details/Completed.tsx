@@ -5,7 +5,7 @@ function Completed() {
   return (
     <View style={styles.container}>
       <Icon name="CheckCircleIcon" color="#22C55E" />
-      <Text style={styles.text}>Ordem concluída</Text>
+      <Text style={styles.text}>Ordem finalizada</Text>
     </View>
   );
 }

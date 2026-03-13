@@ -1,12 +1,12 @@
 import {
-  CreateWorkOrderData,
-  CreateWorkOrderSchema,
-} from "@/src/app/work-order/manage-work-order/schema";
-import {
   createLocalWorkOrder,
   updateLocalWorkOrder,
 } from "@/src/database/repositories/workOrdersRepository";
 import { ManageWorkOrderInput } from "@/src/domain/dtos/work-order";
+import {
+  CreateWorkOrderData,
+  CreateWorkOrderSchema,
+} from "@/src/domain/manage-work-order/schema";
 import {
   createWorkOrder,
   updateWorkOrder,
