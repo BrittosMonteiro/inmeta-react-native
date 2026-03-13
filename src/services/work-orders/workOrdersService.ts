@@ -1,5 +1,5 @@
-import { CreateWorkOrderData } from "@/src/app/work-order/manage-work-order/schema";
 import { UpdateWorkOrderInput, WorkOrder } from "@/src/domain/dtos/work-order";
+import { CreateWorkOrderData } from "@/src/domain/manage-work-order/schema";
 
 export async function getWorkOrders(): Promise<WorkOrder[]> {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders`;

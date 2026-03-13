@@ -4,8 +4,10 @@ import { IsErrorComponent } from "@/src/components/state-components/error";
 import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
+import { NEXT_STEP } from "@/src/domain/details";
 import { useDeleteWorkOrder } from "@/src/hooks/work-orders/useDeleteWorkOrder";
 import { useGetWorkOrder } from "@/src/hooks/work-orders/useGetWorkOrder";
+import { useManageWorkOrder } from "@/src/hooks/work-orders/useManageWorkOrder";
 import { formatDate } from "@/src/utils/date-utils";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
@@ -16,6 +18,7 @@ export default function WorkOrderDetails() {
 
   const { data, error, isLoading, refetch } = useGetWorkOrder(id as string);
   const { onDelete, isError, isPending } = useDeleteWorkOrder();
+  const { onSubmit } = useManageWorkOrder();
 
   if (error || !data) {
     return <Button title="Tentar novamente" action={refetch} />;
@@ -32,10 +35,11 @@ export default function WorkOrderDetails() {
       <Container>
         {data.status !== "Completed" ? (
           <Button
-            title="Concluir"
-            action={() => console.log("Concluir")}
-            iconName="CheckCircleIcon"
-            variant="success"
+            title={`Atualizar para: ${NEXT_STEP[data.status].label}`}
+            action={() =>
+              onSubmit({ ...data, status: NEXT_STEP[data.status].status })
+            }
+            variant={NEXT_STEP[data.status].variant}
           />
         ) : (
           <Completed />
@@ -47,29 +51,31 @@ export default function WorkOrderDetails() {
         <Card label="Criado em" text={formatDate(data.createdAt)} />
         <Card label="Última atualização" text={formatDate(data.updatedAt)} />
 
-        <View style={styles.buttonsSection}>
-          <Button
-            title="Editar"
-            iconName="PencilSimpleIcon"
-            path={`/work-order/manage-work-order?id=${id}`}
-            variant="primary"
-          />
-
-          {isError ? (
-            <IsErrorComponent
-              title={"Houve um erro ao tentar apagar"}
-              subtitle="Tente novamente em instantes"
-              action={() => onDelete(data.id)}
-            />
-          ) : (
+        {data.status !== "Completed" && (
+          <View style={styles.buttonsSection}>
             <Button
-              title="Apagar"
-              iconName="TrashIcon"
-              action={() => onDelete(data.id)}
-              variant="danger"
+              title="Editar"
+              iconName="PencilSimpleIcon"
+              path={`/work-order/manage-work-order?id=${id}`}
+              variant="primary"
             />
-          )}
-        </View>
+
+            {isError ? (
+              <IsErrorComponent
+                title={"Houve um erro ao tentar apagar"}
+                subtitle="Tente novamente em instantes"
+                action={() => onDelete(data.id)}
+              />
+            ) : (
+              <Button
+                title="Apagar"
+                iconName="TrashIcon"
+                action={() => onDelete(data.id)}
+                variant="danger"
+              />
+            )}
+          </View>
+        )}
       </Container>
     </Screen>
   );

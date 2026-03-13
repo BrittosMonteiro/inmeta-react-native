@@ -5,5 +5,8 @@ export function formatDate(dateString: string, fallback = "") {
     return fallback;
   }
 
-  return date.toLocaleDateString("pt-BR");
+  const formattedDate = date.toLocaleDateString("pt-BR");
+  const formattedTime = date.toLocaleTimeString("pt-BR");
+
+  return `${formattedDate} - ${formattedTime}`;
 }

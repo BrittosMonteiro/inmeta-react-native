@@ -1,7 +1,7 @@
 import { Href } from "expo-router";
 import * as Icons from "phosphor-react-native";
 
-type ButtonVariants = "neutral" | "primary" | "danger" | "success";
+type ButtonVariants = "neutral" | "primary" | "danger" | "success" | "warning";
 
 type ButtonProps =
   | {
