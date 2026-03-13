@@ -1,6 +1,6 @@
 import { Card } from "@/src/components/details/Card";
 import { Completed } from "@/src/components/details/Completed";
-import { IsErrorComponent } from "@/src/components/error";
+import { IsErrorComponent } from "@/src/components/state-components/error";
 import { Button } from "@/src/components/ui/button";
 import { Header } from "@/src/components/ui/header";
 import { Container, Screen } from "@/src/components/ui/screen";
