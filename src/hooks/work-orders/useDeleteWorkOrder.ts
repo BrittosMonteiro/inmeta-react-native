@@ -1,4 +1,6 @@
+import { deleteLocalWorkOrder } from "@/src/database/repositories/workOrdersRepository";
 import { deleteWorkOrder } from "@/src/services/work-orders/workOrdersService";
+import { isOnline } from "@/src/utils/network/isOnline";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 
@@ -20,6 +22,13 @@ export function useDeleteWorkOrder() {
 const useDeleteWorkOrderMutation = () => {
   const mutation = useMutation({
     mutationFn: async (id: string) => {
+      const online = await isOnline();
+
+      if (!online) {
+        await deleteLocalWorkOrder(id);
+        return;
+      }
+
       await deleteWorkOrder(id);
     },
     onSuccess: () => {

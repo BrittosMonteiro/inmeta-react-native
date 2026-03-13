@@ -27,9 +27,17 @@ export type WorkOrderDetails = Pick<
   | "updatedAt"
 >;
 
-export type ManageWorkOrderInput = {
-  id?: string;
+export type CreateWorkOrderInput = {
   title: string;
   description: string;
   assignedTo: string;
 };
+
+export type UpdateWorkOrderInput = {
+  id: string;
+  title: string;
+  description: string;
+  assignedTo: string;
+};
+
+export type ManageWorkOrderInput = CreateWorkOrderInput | UpdateWorkOrderInput;

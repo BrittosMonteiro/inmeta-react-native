@@ -1,5 +1,5 @@
 import { CreateWorkOrderData } from "@/app/work-order/manage-work-order/schema";
-import { ManageWorkOrderInput, WorkOrder } from "@/src/domain/dtos/work-order";
+import { UpdateWorkOrderInput, WorkOrder } from "@/src/domain/dtos/work-order";
 
 export async function getWorkOrders(): Promise<WorkOrder[]> {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders`;
@@ -46,11 +46,9 @@ export async function createWorkOrder(
 }
 
 export async function updateWorkOrder(
-  data: ManageWorkOrderInput,
+  data: UpdateWorkOrderInput,
 ): Promise<WorkOrder> {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/work-orders/${data.id}`;
-
-  delete data.id;
 
   const response = await fetch(url, {
     method: "PUT",
