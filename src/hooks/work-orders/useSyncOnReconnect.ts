@@ -1,21 +1,19 @@
 import { syncWorkOrders } from "@/src/services/sync/syncWorkOrders";
-import * as Network from "expo-network";
+import NetInfo from "@react-native-community/netinfo";
 import { useEffect } from "react";
 
 export function useSyncOnReconnect() {
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      const isOnline = state.isConnected && state.isInternetReachable;
 
-    async function checkConnection() {
-      const state = await Network.getNetworkStateAsync();
-
-      if (state.isConnected && state.isInternetReachable) {
-        await syncWorkOrders();
+      if (isOnline) {
+        syncWorkOrders();
       }
-    }
+    });
 
-    interval = setInterval(checkConnection, 5000);
-
-    return () => clearInterval(interval);
+    return () => {
+      unsubscribe();
+    };
   }, []);
 }
