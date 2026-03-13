@@ -1,51 +1,132 @@
-# Welcome to your Expo app 👋
+# Ordens de Serviço
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicação mobile desenvolvida em React Native para gerenciamento de ordens de serviço, com suporte completo a funcionamento offline e sincronização automática quando a conexão é restabelecida.
 
-## Get started
+O objetivo do projeto é demonstrar uma arquitetura offline-first, onde o aplicativo continua totalmente funcional mesmo sem conexão com a internet.
 
-1. Install dependencies
+# Tecnologias Utilizadas
 
-   ```bash
-   npm install
-   ```
+- React Native
+- Expo
+- Realm
+- TanStack Query
+- Zod
+- @react-native-community/netinfo
 
-2. Start the app
+# Funcionalidades
 
-   ```bash
-   npx expo start
-   ```
+- Listagem de ordens de serviço
+- Visualização de detalhes
+- Criação de novas ordens
+- Edição de ordens existentes
+- Exclusão de ordens
+- Alteração de status da ordem
+- Sincronização automática com a API
+- Funcionamento completo offline
 
-In the output, you'll find options to open the app in a
+# Arquitetura Offline-First
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+O aplicativo utiliza uma abordagem offline-first, onde o banco local é a principal fonte de dados.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Fluxo de funcionamento:
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+UI
+↓
+Realm (banco local)
+↓
+Serviço de sincronização
+↓
+API
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Comportamento offline
 
-## Learn more
+Quando o dispositivo está sem conexão:
 
-To learn more about developing your project with Expo, look at the following resources:
+- As operações são salvas no banco local
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Cada alteração recebe um syncStatus
 
-## Join the community
+- A sincronização ocorre automaticamente quando a conexão retorna
 
-Join our community of developers creating universal apps.
+## Sincronização
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-# inmeta-react-native
+O processo de sincronização realiza:
+
+1. Envio das alterações locais para o servidor
+
+2. Busca de alterações remotas usando endpoint /work-orders/sync
+
+3. Atualização do banco local
+
+# Estrutura do Projeto
+
+```
+src
+ ├── app                 # Rotas do Expo Router
+ │
+ ├── components          # Componentes reutilizáveis
+ │
+ ├── database            # Configuração e schemas do Realm
+ │
+ ├── domain              # DTOs e modelos de domínio
+ │
+ ├── hooks               # Hooks de lógica de aplicação
+ │
+ ├── lib                 # Configurações de libs como tankstack
+ │
+ ├── services            # Integração com API e sincronização
+ │
+ ├── store               # Gerenciamento de estado da aplicação
+ │
+ └── utils               # Utilitários
+```
+
+# Instalação
+
+Clone o repositório:
+
+```
+git clone https://github.com/BrittosMonteiro/inmeta-react-native
+```
+
+Instale as dependências:
+
+```
+npm install
+```
+
+# Executando o projeto
+
+Inicie o projeto com:
+
+```
+npx expo start
+```
+
+ou
+
+```
+npx expo run:ios
+```
+
+ou
+
+```
+npx expo run:android
+```
+
+Você poderá rodar o app em:
+
+- Android Emulator
+- iOS Simulator
+- Dispositivo físico usando Expo Go
+
+# Variáveis de Ambiente
+
+No arquivo .env informar a URL do backend:
+
+```
+EXPO_PUBLIC_API_URL=http://localhost:3000
+```
